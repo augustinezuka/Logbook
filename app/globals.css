@@ -13,8 +13,8 @@
   --color-muted: #7a7566;
 
   --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", ui-monospace, monospace;
 }
 
 body {
@@ -22,15 +22,47 @@ body {
   color: var(--color-ink);
   background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
   background-size: 22px 22px;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 .font-display {
   font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .font-mono {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+}
+
+/* Professional typography improvements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+p, span, div, li {
+  font-family: var(--font-sans);
 }
 
 /* Ledger tape: dashed-edge strip used for headers and totals */
@@ -39,6 +71,7 @@ body {
   border: 1px solid var(--color-line);
   border-radius: 3px;
   position: relative;
+  box-shadow: 0 1px 2px rgba(26, 29, 24, 0.04);
 }
 
 .ledger-tape::before,
@@ -52,31 +85,39 @@ body {
   background-size: 12px 8px;
   background-repeat: repeat-x;
 }
+
 .ledger-tape::before {
   top: -1px;
 }
+
 .ledger-tape::after {
   bottom: -1px;
   transform: rotate(180deg);
 }
 
-/* Enhanced stamp button with improved hover and active states */
+/* Enhanced stamp button with professional styling */
 .stamp-btn {
   font-family: var(--font-display);
+  font-weight: 600;
   letter-spacing: 0.02em;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .stamp-btn:hover:not(:disabled) {
   transform: rotate(-1deg) scale(1.02);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(26, 29, 24, 0.15);
 }
 
 .stamp-btn:active:not(:disabled) {
   transform: rotate(0deg) scale(0.98);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(26, 29, 24, 0.08);
 }
 
 .stamp-btn:disabled {
@@ -84,32 +125,87 @@ body {
   opacity: 0.6;
 }
 
-/* Mobile-specific improvements */
-@media (max-width: 640px) {
-  .stamp-btn {
-    min-height: 44px;
-    /* Better touch target size for mobile */
-  }
-}
-
-/* Reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  .stamp-btn:hover:not(:disabled),
-  .stamp-btn:active:not(:disabled) {
-    transform: none;
-    box-shadow: none;
-  }
-}
-
-/* Focus visible for better accessibility */
+/* Focus states for accessibility */
 .stamp-btn:focus-visible,
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+button:focus-visible {
   outline: 2px solid var(--color-ink);
   outline-offset: 2px;
+}
+
+/* Input field improvements */
+input,
+select,
+textarea {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(26, 29, 24, 0.1);
+}
+
+/* Mobile-first responsive improvements */
+@media (max-width: 640px) {
+  body {
+    font-size: 16px; /* Prevent zoom on mobile input focus */
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  .stamp-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  input,
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  .stamp-btn,
+  button {
+    border: 1px solid black;
+  }
 }
