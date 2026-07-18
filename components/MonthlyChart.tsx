@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import { useEffect, useState } from "react";
 
 type MonthRow = { month: string; revenue: number; expenses: number };
 
@@ -17,6 +18,15 @@ function formatMoney(n: number) {
 }
 
 export default function MonthlyChart({ data }: { data: MonthRow[] }) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   if (data.length === 0) {
     return (
       <p className="py-8 text-center text-sm text-[var(--color-muted)]">
@@ -25,28 +35,31 @@ export default function MonthlyChart({ data }: { data: MonthRow[] }) {
     );
   }
 
+  const chartHeight = isMobile ? 200 : 280;
+  const yAxisWidth = isMobile ? 45 : 60;
+
   return (
-    <ResponsiveContainer width="100%" height={280}>
-      <BarChart data={data} barGap={4}>
+    <ResponsiveContainer width="100%" height={chartHeight}>
+      <BarChart data={data} barGap={4} margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
         <CartesianGrid vertical={false} stroke="var(--color-line)" />
         <XAxis
           dataKey="month"
-          tick={{ fontFamily: "var(--font-mono)", fontSize: 12, fill: "#7a7566" }}
+          tick={{ fontFamily: "var(--font-mono)", fontSize: isMobile ? 10 : 12, fill: "#7a7566" }}
           axisLine={{ stroke: "var(--color-line)" }}
           tickLine={false}
         />
         <YAxis
-          tick={{ fontFamily: "var(--font-mono)", fontSize: 11, fill: "#7a7566" }}
+          tick={{ fontFamily: "var(--font-mono)", fontSize: isMobile ? 9 : 11, fill: "#7a7566" }}
           axisLine={false}
           tickLine={false}
-          width={60}
+          width={yAxisWidth}
           tickFormatter={(v) => `$${v}`}
         />
         <Tooltip
           formatter={(value: number) => formatMoney(value)}
           contentStyle={{
             fontFamily: "var(--font-mono)",
-            fontSize: 12,
+            fontSize: 11,
             border: "1px solid var(--color-line)",
             borderRadius: 4,
           }}
