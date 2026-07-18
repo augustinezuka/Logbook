@@ -23,15 +23,20 @@ export default function Dialog({
     if (open) {
       document.addEventListener("keydown", onKey);
       panelRef.current?.querySelector("input")?.focus();
+      // Prevent body scroll on mobile
+      document.body.style.overflow = "hidden";
     }
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "unset";
+    };
   }, [open, onClose]);
 
   if (!open) return null;
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-ink)]/40 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-ink)]/40 px-4 py-6 sm:py-4 overflow-y-auto"
       onClick={onClose}
       role="presentation"
     >
@@ -41,14 +46,14 @@ export default function Dialog({
         aria-modal="true"
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
-        className="ledger-tape w-full max-w-md p-6"
+        className="ledger-tape w-full max-w-md p-5 sm:p-6 my-auto"
       >
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-display text-xl font-semibold">{title}</h2>
+        <div className="mb-4 flex items-start sm:items-center justify-between gap-4">
+          <h2 className="font-display text-lg sm:text-xl font-semibold flex-1">{title}</h2>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="font-mono text-lg text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+            className="flex-shrink-0 font-mono text-xl sm:text-lg text-[var(--color-muted)] hover:text-[var(--color-ink)] transition-colors duration-200"
           >
             ×
           </button>
