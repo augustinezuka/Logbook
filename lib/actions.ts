@@ -27,7 +27,7 @@ function slugify(input: string) {
   );
 }
 
-export async function signupAction(formData: FormData) {
+export async function signupAction(formData: FormData): Promise<void> {
   const parsed = signupSchema.safeParse({
     companyName: formData.get("companyName"),
     name: formData.get("name"),
@@ -36,7 +36,7 @@ export async function signupAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    return { error: parsed.error.issues[0].message };
+    throw new Error(parsed.error.issues[0].message);
   }
 
   const { companyName, name, email, password } = parsed.data;
@@ -48,7 +48,7 @@ export async function signupAction(formData: FormData) {
     .limit(1);
 
   if (existing) {
-    return { error: "An account with that email already exists." };
+    throw new Error("An account with that email already exists.");
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
