@@ -36,7 +36,7 @@ export default function Dialog({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-ink)]/40 px-4 py-6 sm:py-4 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-ink)]/40 px-3 py-4 sm:px-4 overflow-y-auto"
       onClick={onClose}
       role="presentation"
     >
@@ -46,14 +46,14 @@ export default function Dialog({
         aria-modal="true"
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
-        className="ledger-tape w-full max-w-md p-5 sm:p-6 my-auto"
+        className="ledger-tape w-full max-w-md p-4 sm:p-5 md:p-6 my-auto"
       >
-        <div className="mb-4 flex items-start sm:items-center justify-between gap-4">
-          <h2 className="font-display text-lg sm:text-xl font-semibold flex-1">{title}</h2>
+        <div className="mb-3 sm:mb-4 flex items-start justify-between gap-3">
+          <h2 className="font-display text-base sm:text-lg md:text-xl font-semibold leading-tight flex-1">{title}</h2>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="flex-shrink-0 font-mono text-xl sm:text-lg text-[var(--color-muted)] hover:text-[var(--color-ink)] transition-colors duration-200"
+            className="flex-shrink-0 font-mono text-lg sm:text-xl text-[var(--color-muted)] hover:text-[var(--color-ink)] transition-colors duration-200 p-1"
           >
             ×
           </button>
